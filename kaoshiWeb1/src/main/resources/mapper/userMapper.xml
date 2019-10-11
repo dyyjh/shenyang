@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.sy.dao.UserDao">
+	<resultMap id="BaseResultMap" type="com.sy.model.User">
+		<id column="USER_ID" property="userId" jdbcType="INTEGER" />
+		<result column="USER_NAME" property="userName" jdbcType="CHAR" />
+		<result column="USER_PASSWORD" property="userPassword"
+			jdbcType="CHAR" />
+	</resultMap>
+	<!-- 查询单条记录 -->
+	<select id="selectUserById" parameterType="int" resultMap="BaseResultMap">
+		SELECT * FROM t_user WHERE USER_ID = #{userId}
+	</select>
+
+	<!-- <select id="selectUserInfo" parameterType="com.sy.model.User"
+		resultMap="BaseResultMap"> -->
+	<select id="selectUserInfo" parameterType="com.sy.model.User" resultType="user">
+		SELECT user_id userId,
+		USER_NAME userName,
+		USER_PASSWORD userPassword,
+		sex sex
+		 FROM t_user 
+		 where
+		 1=1 
+		 <if test="userId!=null and userId !='' " >
+		 and USER_ID = #{userId}
+		 </if>
+		 <if test="userPassword!=null and userPassword !='' ">
+		 	and USER_PASSWORD = #{userPassword}
+		 </if>
+		 <if test="userName!=null and userName !=''">
+		   and USER_NAME like concat('%',#{userName},'%')
+		   
+		 </if> 
+	</select>
+
+	<insert id="insertUser" parameterType="com.sy.model.User">
+	    insert into t_user
+		(user_id,user_password,USER_NAME,sex)
+		values
+		(#{userId,jdbcType=INTEGER}
+		,
+		#{userPassword,jdbcType=VARCHAR},
+		
+		#{userName,jdbcType=VARCHAR}
+		,
+		#{sex,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<insert id="insertDbBatch" parameterType="com.sy.model.User">
+		insert into t_user
+		(user_id,user_password,USER_NAME,sex)
+		values
+		<foreach collection="list" item="item" index="index" separator=",">
+		(
+			#{item.userId,jdbcType=INTEGER},
+			#{item.userName,jdbcType=VARCHAR},
+			#{item.userPassword,jdbcType=VARCHAR},
+			#{item.sex,jdbcType=VARCHAR}
+		)
+		</foreach>
+	</insert>
+	
+	<update id="updateUser" parameterType="com.sy.model.User">
+		update t_user 
+		<set>
+			<if test="userId!=null and userId !='' ">
+			user_id = #{userId},
+			</if>
+			<if test="userPassword!=null and userPassword !='' ">
+			user_password = #{userPassword},
+			</if>
+			<if test="userName!=null and userName!=''">
+			user_name=#{userName},
+			</if>
+			<if test="sex!=null and sex!=''">
+			sex=#{sex}
+			</if>
+		</set>
+		where user_id=#{userId}
+	</update>
+	
+	<delete id="deleteUserBatch" parameterType="java.util.List">
+	delete from t_user 
+	where user_id in 
+	<foreach collection="list" item="item" open="("   separator="," close=")">
+		#{item}
+	</foreach>
+	
+	</delete>
+
+</mapper>
