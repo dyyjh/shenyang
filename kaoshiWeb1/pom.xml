@@ -21,7 +21,7 @@
 		<jstl.version>1.2</jstl.version>
 		<jsp-api.version>2.0</jsp-api.version>
 		<taglibs.version>1.1.2</taglibs.version>
-		<httpclient.version>4.5.1</httpclient.version>
+		<httpclient.version>4.5.13</httpclient.version>
 		<httpcore.version>4.4.5</httpcore.version>
 		<javax.servlet-api.version>3.1.0</javax.servlet-api.version>
 		<commons-lang3.version>3.7</commons-lang3.version>
